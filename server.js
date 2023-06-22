@@ -22,4 +22,4 @@ app.use(express.json());
 app.use("/api", routers);
 app.use(errorHandler);
 
-app.listen(PORT, console.log(`Server started on port ${PORT}`));
+app.listen(PORT, console.log(`Server started on port ${PORT} | ${process.env.NODE_ENV}`));
