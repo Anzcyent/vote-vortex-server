@@ -123,7 +123,7 @@ const getOneSurvey = errorWrapper(async (req, res, next) => {
   const survey = await Survey.findById(id).populate({
     path: "owner",
     select: "username",
-  });
+  }).populate("items");
 
   if (!survey) return next(new CustomError("Survey not found", 404));
 
