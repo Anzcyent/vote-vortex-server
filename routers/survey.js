@@ -9,8 +9,9 @@ const {
   checkUserVoted,
   checkEditExpire,
 } = require("../middlewares/db/checkOperations");
-const { create, vote, edit } = require("../controllers/survey");
+const { create, vote, edit, getAllSurveys } = require("../controllers/survey");
 
+router.get("/", getAllSurveys);
 router.post("/create", getAccessToRoute, create);
 router.post(
   "/vote",

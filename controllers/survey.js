@@ -106,4 +106,12 @@ const edit = errorWrapper(async (req, res, next) => {
   });
 });
 
-module.exports = { create, vote, edit };
+const getAllSurveys = errorWrapper(async (req, res, next) => {
+  const surveys = await Survey.find();
+
+  return res.status(200).json({
+    surveys,
+  });
+});
+
+module.exports = { create, vote, edit, getAllSurveys };
