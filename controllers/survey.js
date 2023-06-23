@@ -117,4 +117,19 @@ const getAllSurveys = errorWrapper(async (req, res, next) => {
   });
 });
 
-module.exports = { create, vote, edit, getAllSurveys };
+const getOneSurvey = errorWrapper(async (req, res, next) => {
+  const { id } = req.params;
+
+  const survey = await Survey.findById(id).populate({
+    path: "owner",
+    select: "username",
+  });
+
+  if (!survey) return next(new CustomError("Survey not found", 404));
+
+  return res.status(200).json({
+    survey,
+  });
+});
+
+module.exports = { create, vote, edit, getAllSurveys, getOneSurvey };
