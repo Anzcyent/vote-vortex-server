@@ -1,4 +1,5 @@
 const { Schema, model, Types } = require("mongoose");
+const Item = require("./Item");
 
 const SurveySchema = new Schema(
   {
@@ -34,5 +35,11 @@ const SurveySchema = new Schema(
     timestamps: true,
   }
 );
+
+SurveySchema.post("remove", async function (next) {
+  const res = await Item.deleteMany({
+    survey: this._id,
+  });
+});
 
 module.exports = model("Survey", SurveySchema);
