@@ -107,7 +107,10 @@ const edit = errorWrapper(async (req, res, next) => {
 });
 
 const getAllSurveys = errorWrapper(async (req, res, next) => {
-  const surveys = await Survey.find();
+  const surveys = await Survey.find().populate({
+    path: "owner",
+    select: "username",
+  });
 
   return res.status(200).json({
     surveys,
