@@ -40,7 +40,12 @@ const create = errorWrapper(async (req, res, next) => {
 });
 
 const vote = errorWrapper(async (req, res, next) => {
-  const survey = await Survey.findById(req.survey._id);
+  const survey = await Survey.findById(req.survey._id)
+    .populate({
+      path: "owner",
+      select: "username",
+    })
+    .populate("items");
   const item = await Item.findById(req.item._id);
   const user = await User.findById(req.user._id);
 
@@ -67,9 +72,18 @@ const vote = errorWrapper(async (req, res, next) => {
     })
   );
 
+  survey.items.forEach((item) => {
+    const updatedItemVote = updatedItemVotes.find((vote) =>
+      vote.id.equals(item._id)
+    );
+    if (updatedItemVote) {
+      item.percentage = updatedItemVote.votePercentage;
+    }
+  });
+
   res.status(200).json({
     survey,
-    itemVotes: updatedItemVotes,
+    user
   });
 });
 
@@ -120,10 +134,12 @@ const getAllSurveys = errorWrapper(async (req, res, next) => {
 const getOneSurvey = errorWrapper(async (req, res, next) => {
   const { id } = req.params;
 
-  const survey = await Survey.findById(id).populate({
-    path: "owner",
-    select: "username",
-  }).populate("items");
+  const survey = await Survey.findById(id)
+    .populate({
+      path: "owner",
+      select: "username",
+    })
+    .populate("items");
 
   if (!survey) return next(new CustomError("Survey not found", 404));
 
