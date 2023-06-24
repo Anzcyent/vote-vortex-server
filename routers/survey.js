@@ -19,9 +19,11 @@ const {
   edit,
   getAllSurveys,
   getOneSurvey,
+  searchSurvey,
 } = require("../controllers/survey");
 
 router.get("/", getAllSurveys);
+router.get("/search", searchSurvey);
 router.get("/:id", getOneSurvey);
 router.post("/create", getAccessToRoute, create);
 router.post(

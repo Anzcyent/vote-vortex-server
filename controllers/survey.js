@@ -83,7 +83,7 @@ const vote = errorWrapper(async (req, res, next) => {
 
   res.status(200).json({
     survey,
-    user
+    user,
   });
 });
 
@@ -148,4 +148,24 @@ const getOneSurvey = errorWrapper(async (req, res, next) => {
   });
 });
 
-module.exports = { create, vote, edit, getAllSurveys, getOneSurvey };
+const searchSurvey = errorWrapper(async (req, res, next) => {
+  const { title } = req.query;
+
+  const surveys = await Survey.find({
+    title: { $regex: title, $options: "i" },
+  }).populate({ path: "owner", select: "username" });
+
+  res.status(200).json({
+    surveys,
+    result: surveys.length,
+  });
+});
+
+module.exports = {
+  create,
+  vote,
+  edit,
+  getAllSurveys,
+  getOneSurvey,
+  searchSurvey,
+};
