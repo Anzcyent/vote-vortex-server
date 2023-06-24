@@ -20,6 +20,7 @@ const {
   getAllSurveys,
   getOneSurvey,
   searchSurvey,
+  deleteSurvey,
 } = require("../controllers/survey");
 
 router.get("/", getAllSurveys);
@@ -36,5 +37,7 @@ router.put(
   [getAccessToRoute, checkSurveyExists, checkEditExpire],
   edit
 );
+
+router.delete("/:id", getAccessToRoute, deleteSurvey);
 
 module.exports = router;

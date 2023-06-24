@@ -161,6 +161,18 @@ const searchSurvey = errorWrapper(async (req, res, next) => {
   });
 });
 
+const deleteSurvey = errorWrapper(async (req, res, next) => {
+  const { id } = req.params;
+
+  const surveyToDelete = await Survey.findByIdAndDelete(id);
+
+  const user = await User.findById(surveyToDelete.owner._id);
+  user.surveys.pull(surveyToDelete._id);
+  await user.save();
+
+  return res.status(200).json({ surveyToDelete });
+});
+
 module.exports = {
   create,
   vote,
@@ -168,4 +180,5 @@ module.exports = {
   getAllSurveys,
   getOneSurvey,
   searchSurvey,
+  deleteSurvey,
 };

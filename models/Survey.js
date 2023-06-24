@@ -36,7 +36,7 @@ const SurveySchema = new Schema(
   }
 );
 
-SurveySchema.post("remove", async function (next) {
+SurveySchema.remove(this._id, async function (next) {
   const res = await Item.deleteMany({
     survey: this._id,
   });
