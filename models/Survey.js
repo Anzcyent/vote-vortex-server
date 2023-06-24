@@ -36,10 +36,14 @@ const SurveySchema = new Schema(
   }
 );
 
-SurveySchema.remove(this._id, async function (next) {
-  const res = await Item.deleteMany({
-    survey: this._id,
-  });
+SurveySchema.post("findOneAndDelete", async function (doc, next) {
+  try {
+    const itemsToDelete = await Item.deleteMany({ survey: doc._id });
+
+    next();
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = model("Survey", SurveySchema);
