@@ -12,4 +12,5 @@ const getUser = errorWrapper(async (req, res, next) => {
   });
 });
 
+
 module.exports = { getUser };
